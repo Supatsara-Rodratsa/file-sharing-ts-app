@@ -4,7 +4,7 @@ const router = express.Router();
 const logger = getLogger('USER_ROUTE');
 
 /* GET users listing. */
-router.get('/', function (_req, res, _next) {
+router.get('/', function (_req, res) {
   logger.info('respond with a resource');
   res.send('respond with a resource');
 });

@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 
-import express, { RequestHandler, ErrorRequestHandler  } from 'express';
+import express, { RequestHandler, ErrorRequestHandler } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
@@ -43,23 +43,17 @@ class App {
     this.app.use(requestHandler);
 
     // error handler
-    const errorRequestHandler: ErrorRequestHandler = function (
-      err,
-      req,
-      res,
-      _next
-    ) {
+    const errorRequestHandler: ErrorRequestHandler = function (err, req, res) {
       // set locals, only providing error in development
       res.locals.message = err.message;
-      res.locals.error = req.app.get("env") === "development" ? err : {};
+      res.locals.error = req.app.get('env') === 'development' ? err : {};
 
       // render the error page
       res.status(err.status || 500);
-      res.render("error");
+      res.render('error');
     };
     this.app.use(errorRequestHandler);
   }
 }
 
 export default new App().app;
-
