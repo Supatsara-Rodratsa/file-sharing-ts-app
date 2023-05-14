@@ -1,0 +1,472 @@
+openapi: 3.0.3
+info:
+  title: File Sharing API
+  description: An API for file sharing web application
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+tags:
+  - name: authentication
+    description: Endpoints for user authentication
+  - name: user
+    description: Endpoints for managing user accounts
+  - name: file
+    description: Endpoints for managing files
+  - name: share
+    description: Endpoints for sharing files between users
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - authentication
+      summary: Create user
+      description: Add a new user to the User db
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /auth/login:
+    post:
+      tags:
+        - authentication
+      summary: Login user to the application
+      description: Login user to the application and return JWT token
+      operationId: loginUser
+      requestBody:
+        description: User credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The user's username
+                password:
+                  type: string
+                  format: password
+                  description: The user's password
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    description: JWT token for authenticated user
+                required:
+                  - token
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    description: JWT token for authenticated user
+                required:
+                  - token
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer_auth: []
+  /auth/logout:
+    post:
+      tags:
+        - authentication
+      summary: Logout user from the application
+      description: Logout user from the application and invalidate JWT token
+      operationId: logoutUser
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer_auth: []
+  /users:
+    get:
+      tags:
+        - user
+      summary: List all users
+      description: Returns a list of all users
+      operationId: listUsers
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer_auth: []
+  /file/{userId}:
+    get:
+      tags:
+        - file
+      summary: Get files for a user
+      description: Returns a list of all files owned by the specified user.
+      operationId: getUserFiles
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: The ID of the user whose files to retrieve.
+      responses:
+        '200':
+          description: List of files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer_auth: []
+    post:
+      tags:
+        - file
+      summary: Upload a new file to the specified user's account
+      description: Upload a new file to the specified user's account
+      operationId: uploadFile
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: The ID of the user
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  nullable: false
+      responses:
+        '200':
+          description: File Uploaded Successfully
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer_auth: []
+  /file/{userId}/{filename}:
+    get:
+      tags:
+        - file
+      summary: Get file by filename
+      description: Returns information about the specified file for the specified user ID
+      operationId: getFileById
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: The ID of the user
+        - in: path
+          name: filename
+          schema:
+            type: string
+          required: true
+          description: The filename of the file to get
+      responses:
+        '200':
+          description: List of files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+        '400':
+          description: Bad Request
+        '404':
+          description: File not found
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer_auth: []
+  /file/{userId}/{fileId}:
+    delete:
+      tags:
+        - file
+      summary: Delete a file from the specified user's account
+      description: Deletes the specified file from the specified user's account
+      operationId: deleteFile
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: The ID of the user
+        - in: path
+          name: fileId
+          schema:
+            type: string
+          required: true
+          description: The ID of the file to delete
+      responses:
+        '204':
+          description: File successfully deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: File not found
+        '422':
+          description: Unprocessable Entity
+        '500':
+          description: Internal server error
+      security:
+        - bearer_auth: []
+  /share/{userId}/{fileId}:
+    post:
+      tags:
+        - share
+      summary: Shares the specified file with one or more other users
+      description: Shares the specified file with one or more other users
+      operationId: createdSharedFile
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: The ID of the user
+        - in: path
+          name: fileId
+          schema:
+            type: string
+          required: true
+          description: The ID of the file to share
+      requestBody:
+        description: Created shared file
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SharedFile'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SharedFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SharedFile'
+        required: true
+      responses:
+        '200':
+          description: File successfully shared
+        '401':
+          description: Unauthorized
+        '404':
+          description: UserId or FileId was not found
+        '422':
+          description: Unprocessable Entity
+        '500':
+          description: Internal server error
+      security:
+        - bearer_auth: []
+    put:
+      tags:
+        - share
+      summary: Updates the file sharing for the specified user ID
+      description: Updates the file sharing for the specified user ID
+      operationId: updatedSharedFile
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: The ID of the user
+        - in: path
+          name: fileId
+          schema:
+            type: string
+          required: true
+          description: The ID of the file to share
+      requestBody:
+        description: Updated shared file
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SharedFile'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SharedFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SharedFile'
+        required: true
+      responses:
+        '200':
+          description: Updated successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: UserId or FileId was not found
+        '422':
+          description: Unprocessable Entity
+        '500':
+          description: Internal server error
+      security:
+        - bearer_auth: []
+  /share/{userId}/shared-files:
+    get:
+      tags:
+        - share
+      summary: A list of all shared files with specific user ID
+      description: Returns a list of all files that have been shared with the specified user ID
+      operationId: getSharedFiles
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: The ID of the user
+      responses:
+        '200':
+          description: List of files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/File'
+                description: List of shared files details
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer_auth: []
+
+components:
+  schemas:
+    File:
+      type: object
+      properties:
+        fileId:
+          type: integer
+          description: The unique identifier for the file
+        filename:
+          type: string
+          description: The name of the file
+        size:
+          type: integer
+          description: The size of the file in bytes
+        url:
+          type: string
+          description: The url of the uploaded file
+        format:
+          type: string
+          description: The format of the file
+        dateCreated:
+          type: string
+          format: date-time
+          description: The date when the file was uploaded
+    User:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+      xml:
+        name: user
+    SharedFile:
+      type: object
+      properties:
+        fileId:
+          type: string
+        listOfUserId:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: A JWT token is required to access this api. JWT token can be obtained by providing correct username and password in authentication api.
