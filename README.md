@@ -29,9 +29,9 @@ Authentication is implemented using JSON Web Tokens (JWT). When a user logs in, 
 
 ### Authentication API
 
-- POST `/signup`: Creates a new user account with the provided credentials
-- POST `/login`: Authenticates the user with the provided credentials and returns a JWT token.
-- POST `/logout`: Logs out the currently logged in user and invalidates their JWT token.
+- POST `auth/signup`: Creates a new user account with the provided credentials
+- POST `auth/login`: Authenticates the user with the provided credentials and returns a JWT token.
+- POST `auth/logout`: Logs out the currently logged in user and invalidates their JWT token.
 
 ### User API
 
@@ -39,18 +39,16 @@ Authentication is implemented using JSON Web Tokens (JWT). When a user logs in, 
 
 ### File API
 
-- GET `/users/{userId}/files`: Returns a list of all files owned by the specified user.
-- POST `/users/{userId}/files`: Uploads a new file to the specified user's account.
-- GET `/users/{userId}/files/{fileId}`: Returns information about the specified file for the specified user ID.
-- PUT `/users/{userId}/files/{fileId}`: Updates the specified file's information for the specified user ID.
-- DELETE `/users/{userId}/files/{fileId}`: Deletes the specified file for the specified user ID.
+- GET `/file/{userId}`: Returns a list of all files owned by the specified user.
+- POST `/file/{userId}`: Uploads a new file to the specified user's account.
+- GET `/file/{userId}/{filename}`: Returns information about the specified file for the specified user ID.
+- DELETE `/file/{userId}/{fileId}`: Deletes the specified file for the specified user ID.
 
 ### Share API
 
-- POST `/users/{userId}/files/{fileId}/share`: Shares the specified file with one or more other users.
-- GET `/users/{userId}/shared-files`: Returns a list of all files that have been shared with the specified user ID.
-- PUT `/users/{userId}/files/{fileId}/share`: Updates the sharing settings for the specified file for the specified user ID.
-- DELETE `/users/{userId}/files/{fileId}/share`: Removes sharing settings for the specified file for the specified user ID.
+- POST `/share/{userId}/{fileId}`: Shares the specified file with one or more other users.
+- PUT `/share/{userId}/{fileId}`: Updates the sharing settings for the specified file for the specified user ID.
+- GET `/share/{userId}/shared-files`: Returns a list of all files that have been shared with the specified user ID.
 
 _Note_: All API endpoints require a valid JWT token to be included in the header of the request.
 
