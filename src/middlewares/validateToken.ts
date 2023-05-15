@@ -4,8 +4,8 @@ import {
   HTTP_STATUS_DESC,
   HTTP_STATUS_ERROR_MSG,
 } from '@/constants/httpStatus.constant';
-import { CustomRequest, CustomSession } from '@/interfaces/Custom.interface';
-import { User } from '@/interfaces/User.type';
+import { CustomRequest, CustomSession } from '@/interfaces/custom.interface';
+import { User } from '@/interfaces/user.type';
 import { Response } from 'express';
 import jwt, { Secret, TokenExpiredError } from 'jsonwebtoken';
 
@@ -20,7 +20,7 @@ export const verifyToken = (
     /**
      * STATUS CODE: 401 EXPIRED ACCESS TOKEN
      */
-    return res.status(401).json({
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({
       description: HTTP_STATUS_DESC.UNAUTHORIZED,
       error: HTTP_STATUS_ERROR_MSG.UNAUTHORIZED,
     });
