@@ -40,10 +40,6 @@ paths:
           description: Success
         '400':
           description: Bad Request
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
   /auth/login:
     post:
       tags:
@@ -93,12 +89,24 @@ paths:
                   - token
         '400':
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid Request Body
         '401':
           description: Unauthorized
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid username or password
       security:
         - bearer_auth: []
   /auth/logout:
@@ -111,12 +119,8 @@ paths:
       responses:
         '200':
           description: Success
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
-        '500':
-          description: Internal Server Error
       security:
         - bearer_auth: []
   /users:
@@ -137,11 +141,9 @@ paths:
                   $ref: '#/components/schemas/User'
         '401':
           description: Unauthorized
-        '500':
-          description: Internal Server Error
       security:
         - bearer_auth: []
-  /file/{userId}:
+  /files/{userId}:
     get:
       tags:
         - file
@@ -168,8 +170,6 @@ paths:
           description: Bad Request
         '401':
           description: Unauthorized
-        '500':
-          description: Internal Server Error
       security:
         - bearer_auth: []
     post:
@@ -202,15 +202,13 @@ paths:
           description: Bad Request
         '401':
           description: Unauthorized
-        '500':
-          description: Internal Server Error
       security:
         - bearer_auth: []
-  /file/{userId}/{filename}:
+  /file/{userId}/{fileId}:
     get:
       tags:
         - file
-      summary: Get file by filename
+      summary: Get file by fileId
       description: Returns information about the specified file for the specified user ID
       operationId: getFileById
       parameters:
@@ -221,36 +219,27 @@ paths:
           required: true
           description: The ID of the user
         - in: path
-          name: filename
+          name: fileId
           schema:
             type: string
           required: true
-          description: The filename of the file to get
+          description: The fileId of the file to get
       responses:
         '200':
           description: List of files
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/File'
+                $ref: '#/components/schemas/File'
             application/xml:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/File'
+                $ref: '#/components/schemas/File'
         '400':
           description: Bad Request
-        '404':
-          description: File not found
         '401':
           description: Unauthorized
-        '500':
-          description: Internal Server Error
       security:
         - bearer_auth: []
-  /file/{userId}/{fileId}:
     delete:
       tags:
         - file
@@ -275,12 +264,6 @@ paths:
           description: File successfully deleted
         '401':
           description: Unauthorized
-        '404':
-          description: File not found
-        '422':
-          description: Unprocessable Entity
-        '500':
-          description: Internal server error
       security:
         - bearer_auth: []
   /share/{userId}/{fileId}:
@@ -321,12 +304,16 @@ paths:
           description: File successfully shared
         '401':
           description: Unauthorized
-        '404':
-          description: UserId or FileId was not found
-        '422':
-          description: Unprocessable Entity
-        '500':
-          description: Internal server error
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid Body Request
       security:
         - bearer_auth: []
     put:
@@ -364,14 +351,18 @@ paths:
       responses:
         '200':
           description: Updated successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid Body Request
         '401':
           description: Unauthorized
-        '404':
-          description: UserId or FileId was not found
-        '422':
-          description: Unprocessable Entity
-        '500':
-          description: Internal server error
       security:
         - bearer_auth: []
   /share/{userId}/shared-files:
@@ -398,12 +389,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/File'
                 description: List of shared files details
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
-        '500':
-          description: Internal Server Error
       security:
         - bearer_auth: []
 
