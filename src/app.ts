@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-
+import session from 'express-session';
 import express, { RequestHandler, ErrorRequestHandler } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
@@ -7,6 +7,9 @@ import logger from 'morgan';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
+import signupRouter from './routes/auth/signup';
+import loginRouter from './routes/auth/login';
+import logoutRouter from './routes/auth/logout';
 
 class App {
   public app: express.Application;
@@ -28,11 +31,21 @@ class App {
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cookieParser());
     this.app.use(express.static(path.join(__dirname, 'public')));
+    this.app.use(
+      session({
+        secret: 'accessToken',
+        resave: false,
+        saveUninitialized: true,
+      })
+    );
   }
 
   private routerSetup() {
     this.app.use('/', indexRouter);
     this.app.use('/users', usersRouter);
+    this.app.use('/auth/signup', signupRouter);
+    this.app.use('/auth/login', loginRouter);
+    this.app.use('/auth/logout', logoutRouter);
   }
 
   private errorHandler() {
