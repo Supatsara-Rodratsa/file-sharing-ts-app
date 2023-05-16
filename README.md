@@ -39,16 +39,16 @@ Authentication is implemented using JSON Web Tokens (JWT). When a user logs in, 
 
 ### File API
 
-- GET `/files/{userId}`: Returns a list of all files owned by the specified user.
-- POST `/files-upload/{userId}`: Uploads a new file to the specified user's account.
-- GET `/file/{userId}/{fileId}`: Returns information about the specified file for the specified user ID.
-- DELETE `/file/{userId}/{fileId}`: Deletes the specified file for the specified user ID.
+- GET `/files`: Returns a list of all files owned by the specified user.
+- POST `/file-upload`: Uploads a new file to the specified user's account.
+- GET `/file/{fileId}`: Returns information about the specified file for the specified user ID.
+- DELETE `/file/{fileId}`: Deletes the specified file for the specified user ID.
 
 ### Share API
 
-- POST `/share/{userId}/{fileId}`: Shares the specified file with one or more other users.
-- PUT `/share/{userId}/{fileId}`: Updates the sharing settings for the specified file for the specified user ID.
-- GET `/share/{userId}/shared-files`: Returns a list of all files that have been shared with the specified user ID.
+- POST `/share/{fileId}`: Shares the specified file with one or more other users.
+- PUT `/share/{fileId}`: Updates the sharing settings for the specified file for the specified user ID.
+- GET `/shared-files`: Returns a list of all files that have been shared with the specified user ID.
 
 _Note_: All API endpoints require a valid JWT token to be included in the header of the request.
 

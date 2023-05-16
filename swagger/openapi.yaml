@@ -143,20 +143,13 @@ paths:
           description: Unauthorized
       security:
         - bearer_auth: []
-  /files/{userId}:
+  /files:
     get:
       tags:
         - file
       summary: Get files for a user
       description: Returns a list of all files owned by the specified user.
       operationId: getUserFiles
-      parameters:
-        - in: path
-          name: userId
-          schema:
-            type: string
-          required: true
-          description: The ID of the user whose files to retrieve.
       responses:
         '200':
           description: List of files
@@ -172,19 +165,13 @@ paths:
           description: Unauthorized
       security:
         - bearer_auth: []
+  /file-upload:
     post:
       tags:
         - file
       summary: Upload a new file to the specified user's account
       description: Upload a new file to the specified user's account
       operationId: uploadFile
-      parameters:
-        - in: path
-          name: userId
-          schema:
-            type: string
-          required: true
-          description: The ID of the user
       requestBody:
         content:
           multipart/form-data:
@@ -204,7 +191,7 @@ paths:
           description: Unauthorized
       security:
         - bearer_auth: []
-  /file/{userId}/{fileId}:
+  /file/{fileId}:
     get:
       tags:
         - file
@@ -212,12 +199,6 @@ paths:
       description: Returns information about the specified file for the specified user ID
       operationId: getFileById
       parameters:
-        - in: path
-          name: userId
-          schema:
-            type: string
-          required: true
-          description: The ID of the user
         - in: path
           name: fileId
           schema:
@@ -248,12 +229,6 @@ paths:
       operationId: deleteFile
       parameters:
         - in: path
-          name: userId
-          schema:
-            type: string
-          required: true
-          description: The ID of the user
-        - in: path
           name: fileId
           schema:
             type: string
@@ -266,7 +241,7 @@ paths:
           description: Unauthorized
       security:
         - bearer_auth: []
-  /share/{userId}/{fileId}:
+  /share/{fileId}:
     post:
       tags:
         - share
@@ -274,12 +249,6 @@ paths:
       description: Shares the specified file with one or more other users
       operationId: createdSharedFile
       parameters:
-        - in: path
-          name: userId
-          schema:
-            type: string
-          required: true
-          description: The ID of the user
         - in: path
           name: fileId
           schema:
@@ -324,12 +293,6 @@ paths:
       operationId: updatedSharedFile
       parameters:
         - in: path
-          name: userId
-          schema:
-            type: string
-          required: true
-          description: The ID of the user
-        - in: path
           name: fileId
           schema:
             type: string
@@ -365,20 +328,13 @@ paths:
           description: Unauthorized
       security:
         - bearer_auth: []
-  /share/{userId}/shared-files:
+  /shared-files:
     get:
       tags:
         - share
       summary: A list of all shared files with specific user ID
       description: Returns a list of all files that have been shared with the specified user ID
       operationId: getSharedFiles
-      parameters:
-        - in: path
-          name: userId
-          schema:
-            type: string
-          required: true
-          description: The ID of the user
       responses:
         '200':
           description: List of files
@@ -399,8 +355,8 @@ components:
     File:
       type: object
       properties:
-        fileId:
-          type: integer
+        id:
+          type: string
           description: The unique identifier for the file
         filename:
           type: string
@@ -421,10 +377,9 @@ components:
     User:
       type: object
       properties:
-        userId:
-          type: integer
-          format: int64
-          example: 10
+        id:
+          type: string
+          example: '10'
         username:
           type: string
           example: theUser
@@ -445,6 +400,8 @@ components:
     SharedFile:
       type: object
       properties:
+        id:
+          type: string
         fileId:
           type: string
         listOfUserId:
