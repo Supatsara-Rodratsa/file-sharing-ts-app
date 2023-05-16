@@ -1,6 +1,5 @@
 import express from 'express';
 import jwt, { Secret } from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
 import { User } from '@/interfaces/user.type';
 import { CustomSession } from '@/interfaces/custom.interface';
 import {
@@ -9,10 +8,11 @@ import {
   HTTP_STATUS_ERROR_MSG,
 } from '@/constants/httpStatus.constant';
 import { CONSTANT } from '@/constants/constant';
+import { collections } from '@/services/database.service';
 
 const router = express.Router();
 
-router.post('/', function (_req, res) {
+router.post('/', async function (_req, res) {
   const { username, firstName, lastName, email, password } = _req.body as User;
 
   if (!username || !firstName || !lastName || !email || !password) {
@@ -24,10 +24,21 @@ router.post('/', function (_req, res) {
       error: HTTP_STATUS_ERROR_MSG.BAD_REQUEST,
     });
   }
+  const existingUsername = await collections.users?.findOne({ username });
+  if (existingUsername) {
+    /**
+     * STATUS CODE: 409 CONFLICT
+     */
+    return res.status(HTTP_STATUS.CONFLICT).json({
+      description: HTTP_STATUS_DESC.CONFLICT,
+      error: HTTP_STATUS_ERROR_MSG.EXIST_USERNAME,
+    });
+  }
 
-  // TODO: Create new user in DB
+  const result = await collections.users?.insertOne({ ..._req.body });
+
   const token = jwt.sign(
-    { userId: uuidv4(), username, password },
+    { userId: result?.insertedId },
     process.env[CONSTANT.SECRET_KEY] as Secret,
     { expiresIn: '1h' }
   );

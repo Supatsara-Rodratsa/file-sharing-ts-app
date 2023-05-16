@@ -6,13 +6,13 @@ import {
 } from '@/constants/httpStatus.constant';
 import { CustomRequest, CustomSession } from '@/interfaces/custom.interface';
 import { User } from '@/interfaces/user.type';
-import { Response } from 'express';
+import { Response, NextFunction, RequestHandler } from 'express';
 import jwt, { Secret, TokenExpiredError } from 'jsonwebtoken';
 
-export const verifyToken = (
+export const verifyToken: RequestHandler = (
   req: CustomRequest,
   res: Response,
-  isPassingDecodedValue = false
+  next: NextFunction
 ) => {
   const token = req.headers.authorization?.split(' ')[1];
 
@@ -36,10 +36,9 @@ export const verifyToken = (
     // Store accessToken in session
     if (!session.accessToken) session.accessToken = token;
 
-    // Return decode value
-    if (isPassingDecodedValue && decoded) {
-      return decoded;
-    }
+    // Pass the decoded value to the next middleware or route handler
+    req.decodedToken = decoded;
+    next();
   } catch (error) {
     // Clear Session when invalid token
     req.session.accessToken = '';
