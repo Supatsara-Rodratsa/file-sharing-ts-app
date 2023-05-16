@@ -4,21 +4,22 @@ import express, { RequestHandler, ErrorRequestHandler } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import { connectToDatabase } from './services/database.service';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 import signupRouter from './routes/auth/signup';
 import loginRouter from './routes/auth/login';
 import logoutRouter from './routes/auth/logout';
+import filesRouter from './routes/files/uploadFile';
 
 class App {
   public app: express.Application;
 
   constructor() {
     this.app = express();
+    this.connectDatabase();
     this.config();
-    this.routerSetup();
-    this.errorHandler();
   }
 
   private config() {
@@ -46,6 +47,7 @@ class App {
     this.app.use('/auth/signup', signupRouter);
     this.app.use('/auth/login', loginRouter);
     this.app.use('/auth/logout', logoutRouter);
+    this.app.use('/files-upload', filesRouter);
   }
 
   private errorHandler() {
@@ -66,6 +68,18 @@ class App {
       res.render('error');
     };
     this.app.use(errorRequestHandler);
+  }
+
+  private async connectDatabase() {
+    try {
+      connectToDatabase().then(() => {
+        this.routerSetup();
+        this.errorHandler();
+        console.log('Connected to the database');
+      });
+    } catch (error) {
+      console.error('Failed to connect to the database:', error);
+    }
   }
 }
 
