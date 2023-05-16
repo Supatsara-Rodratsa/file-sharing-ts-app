@@ -5,7 +5,7 @@ import {
   HTTP_STATUS_ERROR_MSG,
 } from '@/constants/httpStatus.constant';
 import { CustomRequest, CustomSession } from '@/interfaces/custom.interface';
-import { User } from '@/interfaces/user.type';
+import User from '@/models/user';
 import { Response, NextFunction, RequestHandler } from 'express';
 import jwt, { Secret, TokenExpiredError } from 'jsonwebtoken';
 

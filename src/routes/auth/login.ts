@@ -4,11 +4,11 @@ import {
   HTTP_STATUS_ERROR_MSG,
 } from '@/constants/httpStatus.constant';
 import { CustomRequest, CustomSession } from '@/interfaces/custom.interface';
-import { User } from '@/interfaces/user.type';
 import jwt, { Secret } from 'jsonwebtoken';
 import { collections } from '@/services/database.service';
 import express from 'express';
 import { CONSTANT } from '@/constants/constant';
+import User from '@/models/user';
 
 const router = express.Router();
 

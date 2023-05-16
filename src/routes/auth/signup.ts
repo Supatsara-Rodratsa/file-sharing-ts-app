@@ -1,6 +1,5 @@
 import express from 'express';
 import jwt, { Secret } from 'jsonwebtoken';
-import { User } from '@/interfaces/user.type';
 import { CustomSession } from '@/interfaces/custom.interface';
 import {
   HTTP_STATUS,
@@ -9,6 +8,7 @@ import {
 } from '@/constants/httpStatus.constant';
 import { CONSTANT } from '@/constants/constant';
 import { collections } from '@/services/database.service';
+import User from '@/models/user';
 
 const router = express.Router();
 

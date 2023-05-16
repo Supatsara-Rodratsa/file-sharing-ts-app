@@ -1,8 +1,8 @@
-import { User } from '@/interfaces/user.type';
+import User from '@/models/user';
 
 export const UserMock: User[] = [
   {
-    userId: '1',
+    id: '1',
     username: 'test',
     password: '12345',
     firstName: 'test',
@@ -10,7 +10,7 @@ export const UserMock: User[] = [
     email: 'test@gmail.com',
   },
   {
-    userId: '2',
+    id: '2',
     username: 'test2',
     password: '12345',
     firstName: 'test2',
