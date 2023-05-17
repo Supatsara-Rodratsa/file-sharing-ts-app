@@ -24,6 +24,7 @@ Authentication is implemented using JSON Web Tokens (JWT). When a user logs in, 
 - [EJS](https://ejs.co/)
 - [JWT](https://jwt.io/)
 - [Swagger Editor](https://editor.swagger.io/)
+- [AWS S3](https://aws.amazon.com/)
 
 ## API Endpoints 🪄💥
 
@@ -47,7 +48,6 @@ Authentication is implemented using JSON Web Tokens (JWT). When a user logs in, 
 ### Share API
 
 - POST `/share/{fileId}`: Shares the specified file with one or more other users.
-- PUT `/share/{fileId}`: Updates the sharing settings for the specified file for the specified user ID.
 - GET `/shared-files`: Returns a list of all files that have been shared with the specified user ID.
 
 _Note_: All API endpoints require a valid JWT token to be included in the header of the request.
@@ -58,7 +58,7 @@ _Note_: All API endpoints require a valid JWT token to be included in the header
 - Install dependencies with
   `npm install`
 - Start the server with
-  `npm start`
+  `npm run start`
 
 ## Usage 🏃🏻‍♀️
 
