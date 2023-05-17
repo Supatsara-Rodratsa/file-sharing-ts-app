@@ -11,7 +11,9 @@ import usersRouter from './routes/users';
 import signupRouter from './routes/auth/signup';
 import loginRouter from './routes/auth/login';
 import logoutRouter from './routes/auth/logout';
-import filesRouter from './routes/files/uploadFile';
+import uploadFilesRouter from './routes/files/uploadFile';
+import getFilesRouter from './routes/files/getFiles';
+import searchFilesRouter from './routes/files/searchFile';
 
 class App {
   public app: express.Application;
@@ -47,7 +49,9 @@ class App {
     this.app.use('/auth/signup', signupRouter);
     this.app.use('/auth/login', loginRouter);
     this.app.use('/auth/logout', logoutRouter);
-    this.app.use('/file-upload', filesRouter);
+    this.app.use('/file-upload', uploadFilesRouter);
+    this.app.use('/files', getFilesRouter);
+    this.app.use('/file', searchFilesRouter);
   }
 
   private errorHandler() {

@@ -27,4 +27,5 @@ export const HTTP_STATUS_ERROR_MSG = {
   EXIST_USERNAME: 'Username already exists',
   USERNAME_NOT_FOUND: 'Username does not exist',
   USER_ID_NOT_FOUND: 'UserId does not exist',
+  INVALID_QUERY: 'Invalid search query',
 };
