@@ -27,8 +27,6 @@ router.post(
   upload.single('file'),
   async function (_req: CustomRequest, res) {
     try {
-      console.log(_req.decodedToken?.id, '_req.decodedToken?.userId)');
-
       const currentUser = await collections.users?.findOne({
         _id: new ObjectId(_req.decodedToken?.id),
       });
