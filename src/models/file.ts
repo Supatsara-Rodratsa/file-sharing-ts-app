@@ -7,7 +7,7 @@ export default class File {
     public size: number,
     public url: string,
     public format: string,
-    public dateCreated: Date,
+    public dateCreated: Date | string,
     public id?: ObjectId | string
   ) {}
 }
