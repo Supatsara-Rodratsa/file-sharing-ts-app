@@ -1,6 +1,6 @@
+import User from '@/models/user';
 import { Request } from 'express';
 import { Session } from 'express-session';
-import { User } from './user.type';
 
 export interface CustomSession extends Session {
   accessToken: string;

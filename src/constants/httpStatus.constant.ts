@@ -14,6 +14,7 @@ export const HTTP_STATUS_DESC = {
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
   CONFLICT: 'Conflict',
   NOT_FOUND: 'Not Found',
+  UPLOAD_FILE_SUCCESS: 'File Uploaded Successfully',
 };
 
 export const HTTP_STATUS_ERROR_MSG = {
@@ -25,4 +26,5 @@ export const HTTP_STATUS_ERROR_MSG = {
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
   EXIST_USERNAME: 'Username already exists',
   USERNAME_NOT_FOUND: 'Username does not exist',
+  USER_ID_NOT_FOUND: 'UserId does not exist',
 };

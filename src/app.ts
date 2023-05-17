@@ -47,7 +47,7 @@ class App {
     this.app.use('/auth/signup', signupRouter);
     this.app.use('/auth/login', loginRouter);
     this.app.use('/auth/logout', logoutRouter);
-    this.app.use('/files-upload', filesRouter);
+    this.app.use('/file-upload', filesRouter);
   }
 
   private errorHandler() {
