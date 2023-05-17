@@ -1,8 +1,7 @@
 import request from 'supertest';
 import app from '../app';
 import jwt, { Secret } from 'jsonwebtoken';
-// import FormData from 'form-data';
-// import fs from 'fs';
+import fs from 'fs';
 import dotenv from 'dotenv';
 // import { CONSTANT } from '@/constants/constant';
 // import { collections } from '@/services/database.service';
@@ -17,7 +16,15 @@ let mongoServer: MongoMemoryServer;
 let client: MongoClient;
 let db: Db;
 let usersCollection: Collection<Document>;
+let filesCollection: Collection<Document>;
 dotenv.config();
+
+// Ignore aws service testing
+jest.mock('@/services/aws.service', () => {
+  return jest.fn().mockImplementation(() => ({
+    uploadFile: jest.fn(),
+  }));
+});
 
 describe('Test POST /auth/signup Response', () => {
   it('should return 200 Success when passing requestBody correctly without duplicate username', async () => {
@@ -82,7 +89,7 @@ describe('Test POST /auth/logout Response', () => {
   beforeEach(() => {
     if (token) return;
     token = jwt.sign(
-      { userId: '12345' },
+      { userId: '1' },
       process.env[CONSTANT.SECRET_KEY] as Secret,
       { expiresIn: '1h' }
     );
@@ -111,7 +118,7 @@ describe('Test GET /users Response', () => {
   beforeEach(() => {
     if (token) return;
     token = jwt.sign(
-      { userId: '12345' },
+      { userId: '1' },
       process.env[CONSTANT.SECRET_KEY] as Secret,
       { expiresIn: '1h' }
     );
@@ -161,46 +168,55 @@ describe('Test GET /users Response', () => {
 //   });
 // });
 
-// describe('Test POST /file/{userId}', () => {
-//   beforeEach(() => {
-//     if (token) return;
-//     token = jwt.sign({ userId: '123' }, 'your-secret-key');
-//   });
+describe('Test POST /file-upload', () => {
+  beforeAll(async () => {
+    await connectToMockDatabase();
+  });
 
-//   it('should return 200 Success when uploading a file with correct accessToken, userId, and file', async () => {
-//     const form = new FormData();
-//     form.append('file', fs.createReadStream('src/test/testFile/sally-2.jpeg'), {
-//       filename: 'sally-2.jpeg',
-//     });
+  afterAll(async () => {
+    await disconnectToMockDatabase();
+  });
 
-//     const res = await request(app)
-//       .post('/file/123')
-//       .set('Authorization', `Bearer ${token}`)
-//       .set('Content-Type', 'multipart/form-data')
-//       .send(form);
+  beforeEach(() => {
+    if (token) return;
+    token = jwt.sign(
+      { userId: '1' },
+      process.env[CONSTANT.SECRET_KEY] as Secret
+    );
+  });
 
-//     expect(res.status).toBe(200);
-//     expect(res.body.description).toBe('File Uploaded Successfully');
-//   });
+  it('should return 200 Success when uploading a file with correct accessToken, userId, and file', async () => {
+    const filePath = 'src/test/testFile/sally-2.jpeg';
+    const fileData = fs.readFileSync(filePath);
+    const res = await request(app)
+      .post('/file-upload')
+      .field('key', 'value')
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'multipart/form-data')
+      .attach('file', fileData, 'sally-2.jpeg');
 
-//   it('should return 400 Bad Request when passing incorrect RequestBody', async () => {
-//     const res = await request(app)
-//       .post('/file/123')
-//       .set('Authorization', `Bearer ${token}`)
-//       .send({ test: 2 });
+    expect(res.status).toBe(200);
+    expect(res.body.description).toBe('File Uploaded Successfully');
+  });
 
-//     expect(res.status).toBe(400);
-//   });
+  it('should return 400 Bad Request when passing incorrect RequestBody', async () => {
+    const res = await request(app)
+      .post('/file-upload')
+      .set('Authorization', `Bearer ${token}`);
 
-//   it('should return 401 Unauthorized when passing incorrect accessToken in the header', async () => {
-//     const invalidToken = 'invalid-token';
-//     const res = await request(app)
-//       .post('/file/123')
-//       .set('Authorization', `Bearer ${invalidToken}`);
+    expect(res.status).toBe(400);
+    expect(res.body.description).toBe('Bad Request');
+  });
 
-//     expect(res.status).toBe(401);
-//   });
-// });
+  it('should return 401 Unauthorized when passing incorrect accessToken in the header', async () => {
+    const invalidToken = 'invalid-token';
+    const res = await request(app)
+      .post('/file-upload')
+      .set('Authorization', `Bearer ${invalidToken}`);
+
+    expect(res.status).toBe(401);
+  });
+});
 
 // describe('Test GET /file/{userId}/{fileId}', () => {
 //   beforeEach(() => {
@@ -384,10 +400,15 @@ const connectToMockDatabase = async () => {
     const mockFind = jest.fn().mockReturnValue({
       toArray: () => [...UserMock],
     });
-    const mockFindOne = jest.fn().mockReturnValue(UserMock[0]);
+
+    const mockFindOne = jest.fn().mockReturnValue({ ...UserMock[0] });
     jest.spyOn(usersCollection, 'find').mockImplementation(mockFind);
     jest.spyOn(usersCollection, 'findOne').mockImplementation(mockFindOne);
     collections.users = usersCollection;
+  }
+  if (process.env['FILES_COLLECTION_NAME']) {
+    filesCollection = db.collection(process.env['FILES_COLLECTION_NAME']);
+    collections.files = filesCollection;
   }
 };
 
