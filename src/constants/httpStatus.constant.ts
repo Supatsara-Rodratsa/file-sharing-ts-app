@@ -15,6 +15,7 @@ export const HTTP_STATUS_DESC = {
   CONFLICT: 'Conflict',
   NOT_FOUND: 'Not Found',
   UPLOAD_FILE_SUCCESS: 'File Uploaded Successfully',
+  SHARED_FILE_SUCCESS: 'Shared File Successfully',
 };
 
 export const HTTP_STATUS_ERROR_MSG = {
@@ -27,5 +28,6 @@ export const HTTP_STATUS_ERROR_MSG = {
   EXIST_USERNAME: 'Username already exists',
   USERNAME_NOT_FOUND: 'Username does not exist',
   USER_ID_NOT_FOUND: 'UserId does not exist',
-  INVALID_QUERY: 'Invalid search query',
+  INVALID_QUERY: 'Search query is invalid',
+  FILE_NOT_FOUND: 'File does not exist',
 };
