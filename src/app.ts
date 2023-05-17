@@ -14,6 +14,8 @@ import logoutRouter from './routes/auth/logout';
 import uploadFilesRouter from './routes/files/uploadFile';
 import getFilesRouter from './routes/files/getFiles';
 import searchFilesRouter from './routes/files/searchFile';
+import createSharedFileRouter from './routes/shares/shareFile';
+import getSharedFileRouter from './routes/shares/getSharedFile';
 
 class App {
   public app: express.Application;
@@ -52,6 +54,8 @@ class App {
     this.app.use('/file-upload', uploadFilesRouter);
     this.app.use('/files', getFilesRouter);
     this.app.use('/file', searchFilesRouter);
+    this.app.use('/share', createSharedFileRouter);
+    this.app.use('/shared-files', getSharedFileRouter);
   }
 
   private errorHandler() {

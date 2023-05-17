@@ -8,6 +8,7 @@ export default class File {
     public url: string,
     public format: string,
     public dateCreated: Date | string,
-    public id?: ObjectId | string
+    public id?: ObjectId | string,
+    public shareTo?: string[]
   ) {}
 }
