@@ -8,7 +8,7 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.332.0",
