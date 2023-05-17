@@ -40,6 +40,8 @@ paths:
           description: Success
         '400':
           description: Bad Request
+        '500':
+          description: Internal Server Error
   /auth/login:
     post:
       tags:
@@ -107,6 +109,8 @@ paths:
                   error:
                     type: string
                     example: Invalid username or password
+        '500':
+          description: Internal Server Error
       security:
         - bearer_auth: []
   /auth/logout:
@@ -121,6 +125,8 @@ paths:
           description: Success
         '401':
           description: Unauthorized
+        '500':
+          description: Internal Server Error
       security:
         - bearer_auth: []
   /users:
@@ -141,6 +147,8 @@ paths:
                   $ref: '#/components/schemas/User'
         '401':
           description: Unauthorized
+        '500':
+          description: Internal Server Error
       security:
         - bearer_auth: []
   /files:
@@ -163,6 +171,8 @@ paths:
           description: Bad Request
         '401':
           description: Unauthorized
+        '500':
+          description: Internal Server Error
       security:
         - bearer_auth: []
   /file-upload:
@@ -189,17 +199,19 @@ paths:
           description: Bad Request
         '401':
           description: Unauthorized
+        '500':
+          description: Internal Server Error
       security:
         - bearer_auth: []
-  /file/{fileId}:
+  /file:
     get:
       tags:
         - file
-      summary: Get file by fileId
+      summary: Search file by filename
       description: Returns information about the specified file for the specified user ID
-      operationId: getFileById
+      operationId: searchFileByFilename
       parameters:
-        - in: path
+        - in: query
           name: fileId
           schema:
             type: string
@@ -219,6 +231,8 @@ paths:
           description: Bad Request
         '401':
           description: Unauthorized
+        '500':
+          description: Internal Server Error
       security:
         - bearer_auth: []
     delete:
@@ -227,18 +241,13 @@ paths:
       summary: Delete a file from the specified user's account
       description: Deletes the specified file from the specified user's account
       operationId: deleteFile
-      parameters:
-        - in: path
-          name: fileId
-          schema:
-            type: string
-          required: true
-          description: The ID of the file to delete
       responses:
         '204':
           description: File successfully deleted
         '401':
           description: Unauthorized
+        '500':
+          description: Internal Server Error
       security:
         - bearer_auth: []
   /share/{fileId}:
@@ -283,6 +292,8 @@ paths:
                   error:
                     type: string
                     example: Invalid Body Request
+        '500':
+          description: Internal Server Error
       security:
         - bearer_auth: []
     put:
@@ -326,6 +337,8 @@ paths:
                     example: Invalid Body Request
         '401':
           description: Unauthorized
+        '500':
+          description: Internal Server Error
       security:
         - bearer_auth: []
   /shared-files:
@@ -347,6 +360,8 @@ paths:
                 description: List of shared files details
         '401':
           description: Unauthorized
+        '500':
+          description: Internal Server Error
       security:
         - bearer_auth: []
 
