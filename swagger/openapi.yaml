@@ -269,17 +269,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SharedFile'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SharedFile'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/SharedFile'
+              type: object
+              properties:
+                sharedUserId:
+                  type: array
+                  items:
+                    type: string
         required: true
       responses:
         '200':
-          description: File successfully shared
+          description: File Successfully Shared
         '401':
           description: Unauthorized
         '400':
@@ -291,52 +290,7 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: Invalid Body Request
-        '500':
-          description: Internal Server Error
-      security:
-        - bearer_auth: []
-    put:
-      tags:
-        - share
-      summary: Updates the file sharing for the specified user ID
-      description: Updates the file sharing for the specified user ID
-      operationId: updatedSharedFile
-      parameters:
-        - in: path
-          name: fileId
-          schema:
-            type: string
-          required: true
-          description: The ID of the file to share
-      requestBody:
-        description: Updated shared file
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SharedFile'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SharedFile'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/SharedFile'
-        required: true
-      responses:
-        '200':
-          description: Updated successfully
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Invalid Body Request
-        '401':
-          description: Unauthorized
+                    example: Invalid Request Body
         '500':
           description: Internal Server Error
       security:
@@ -412,17 +366,6 @@ components:
           example: '12345'
       xml:
         name: user
-    SharedFile:
-      type: object
-      properties:
-        id:
-          type: string
-        fileId:
-          type: string
-        listOfUserId:
-          type: array
-          items:
-            type: string
   securitySchemes:
     bearer_auth:
       type: http
