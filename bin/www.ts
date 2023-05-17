@@ -11,8 +11,6 @@ import Debug from 'debug';
 import http from 'http';
 
 const debug = Debug('file-sharing-app:server');
-import { bootstrapLogger } from '@/utils/loggers';
-bootstrapLogger();
 
 /**
  * Get port from environment and store in Express.
