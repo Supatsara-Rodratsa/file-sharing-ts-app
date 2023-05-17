@@ -38,7 +38,7 @@ router.post('/', async function (_req, res) {
   const result = await collections.users?.insertOne({ ..._req.body });
 
   const token = jwt.sign(
-    { userId: result?.insertedId },
+    { id: result?.insertedId },
     process.env[CONSTANT.SECRET_KEY] as Secret,
     { expiresIn: '1h' }
   );

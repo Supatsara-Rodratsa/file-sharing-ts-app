@@ -55,7 +55,7 @@ router.post('/', async function (_req: CustomRequest, res) {
     } else {
       // Create new access token
       const accessToken = jwt.sign(
-        { userId: existingUsername._id },
+        { id: existingUsername._id },
         process.env[CONSTANT.SECRET_KEY] as Secret,
         { expiresIn: '1h' }
       );
