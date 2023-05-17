@@ -3,8 +3,6 @@ import app from '../app';
 import jwt, { Secret } from 'jsonwebtoken';
 import fs from 'fs';
 import dotenv from 'dotenv';
-// import { CONSTANT } from '@/constants/constant';
-// import { collections } from '@/services/database.service';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongoClient, Db, Document, Collection } from 'mongodb';
 import { collections } from '@/services/database.service';
@@ -169,7 +167,7 @@ describe('Test POST /file-upload', () => {
   });
 
   it('should return 200 Success when uploading a file with correct accessToken, userId, and file', async () => {
-    const filePath = 'src/test/testFile/sally-2.jpeg';
+    const filePath = 'src/test/mocks/sally-2.jpeg';
     const fileData = fs.readFileSync(filePath);
     const res = await request(app)
       .post('/file-upload')
@@ -262,107 +260,71 @@ describe('Test GET /file?filename=test', () => {
 //   });
 // });
 
-// describe('Test POST /share/{userId}/{fileId}', () => {
-//   beforeEach(() => {
-//     if (token) return;
-//     token = jwt.sign({ userId: '123' }, 'your-secret-key');
-//   });
+describe('Test POST /share/{fileId}', () => {
+  beforeEach(() => {
+    if (token) return;
+    token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
+  });
 
-//   it('should return 200 File successfully shared when passing correct userId, fileId and correct requestBody', async () => {
-//     const res = await request(app)
-//       .post('/share/123/1')
-//       .set('Authorization', `Bearer ${token}`)
-//       .send({
-//         fileId: 1,
-//         listOfUserId: ['123', '456'],
-//       });
+  it('should return 200 File successfully shared when passing correct requestBody', async () => {
+    const res = await request(app)
+      .post('/share/6464a0ed310a8b3f065db88b')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        sharedUserId: ['2'],
+      });
 
-//     expect(res.status).toBe(200);
-//     expect(res.body.description).toBe('File successfully shared');
-//   });
+    expect(res.status).toBe(200);
+    expect(res.body.description).toBe('Shared File Successfully');
+  });
 
-//   it('should return 401 Unauthorized when passing incorrect accessToken', async () => {
-//     const invalidToken = 'invalid-token';
-//     const res = await request(app)
-//       .post('/share/123/1')
-//       .set('Authorization', `Bearer ${invalidToken}`);
+  it('should return 401 Unauthorized when passing incorrect accessToken', async () => {
+    const invalidToken = 'invalid-token';
+    const res = await request(app)
+      .post('/share/6464a0ed310a8b3f065db88b')
+      .set('Authorization', `Bearer ${invalidToken}`);
 
-//     expect(res.status).toBe(401);
-//   });
+    expect(res.status).toBe(401);
+    expect(res.body.description).toBe('Unauthorized');
+    expect(res.body.error).toBe('Access Token is invalid');
+  });
 
-//   it('should return 400 Bad Request when passing incorrect requestBody', async () => {
-//     const res = await request(app)
-//       .post('/share/123/1')
-//       .set('Authorization', `Bearer ${token}`)
-//       .send({ test: 2 });
+  it('should return 400 Bad Request when passing incorrect requestBody', async () => {
+    const res = await request(app)
+      .post('/share/6464a0ed310a8b3f065db88b')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ test: 2 });
 
-//     expect(res.status).toBe(400);
-//     expect(res.body.error).toBe('Invalid Body Request');
-//   });
-// });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('Invalid Request Body');
+  });
+});
 
-// describe('Test PUT /share/{userId}/{fileId}', () => {
-//   beforeEach(() => {
-//     if (token) return;
-//     token = jwt.sign({ userId: '123' }, 'your-secret-key');
-//   });
+describe('Test GET /shared-files', () => {
+  beforeEach(() => {
+    if (token) return;
+    token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
+  });
 
-//   it('should return 200 shared file successfully updated when passing correct userId, fileId and correct requestBody', async () => {
-//     const res = await request(app)
-//       .put('/share/123/1')
-//       .set('Authorization', `Bearer ${token}`)
-//       .send({
-//         fileId: 1,
-//         listOfUserId: ['123', '456'],
-//       });
+  it('should return 200 when passing correct userId', async () => {
+    const res = await request(app)
+      .get('/shared-files')
+      .set('Authorization', `Bearer ${token}`);
 
-//     expect(res.status).toBe(200);
-//     expect(res.body.description).toBe('Updated successfully');
-//   });
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([...FileMock]);
+  });
 
-//   it('should return 401 Unauthorized when passing incorrect accessToken', async () => {
-//     const invalidToken = 'invalid-token';
-//     const res = await request(app)
-//       .put('/share/123/1')
-//       .set('Authorization', `Bearer ${invalidToken}`);
+  it('should return 401 Unauthorized when passing incorrect accessToken', async () => {
+    const invalidToken = 'invalid-token';
+    const res = await request(app)
+      .get('/shared-files')
+      .set('Authorization', `Bearer ${invalidToken}`);
 
-//     expect(res.status).toBe(401);
-//   });
+    expect(res.status).toBe(401);
+  });
+});
 
-//   it('should return 400 Bad Request when passing incorrect requestBody', async () => {
-//     const res = await request(app)
-//       .put('/share/123/1')
-//       .set('Authorization', `Bearer ${token}`)
-//       .send({ test: 2 });
-
-//     expect(res.status).toBe(400);
-//     expect(res.body.error).toBe('Invalid Body Request');
-//   });
-// });
-
-// describe('Test GET /share/{userId}/shared-files', () => {
-//   beforeEach(() => {
-//     if (token) return;
-//     token = jwt.sign({ userId: '123' }, 'your-secret-key');
-//   });
-
-//   it('should return 200 when passing correct userId', async () => {
-//     const res = await request(app)
-//       .get('/share/123/shared-files')
-//       .set('Authorization', `Bearer ${token}`);
-
-//     expect(res.status).toBe(200);
-//   });
-
-//   it('should return 401 Unauthorized when passing incorrect accessToken', async () => {
-//     const invalidToken = 'invalid-token';
-//     const res = await request(app)
-//       .get('/share/123/shared-files')
-//       .set('Authorization', `Bearer ${invalidToken}`);
-
-//     expect(res.status).toBe(401);
-//   });
-// });
 const connectToMockDatabase = async () => {
   mongoServer = await MongoMemoryServer.create();
   const mongoUri = await mongoServer.getUri();
@@ -392,6 +354,7 @@ const mockCollection = (isSignup: boolean) => {
       toArray: () => [...FileMock],
     });
     jest.spyOn(filesCollection, 'find').mockImplementation(mockFind);
+    jest.spyOn(filesCollection, 'updateOne').mockImplementation(mockFind);
     collections.files = filesCollection;
   }
 };

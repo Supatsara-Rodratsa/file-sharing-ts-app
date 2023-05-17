@@ -9,6 +9,7 @@ export const FileMock: File[] = [
     url: 'test',
     dateCreated: new Date().toString(),
     ownerId: '1',
+    shareTo: ['1'],
   },
   {
     id: '2',
@@ -18,5 +19,6 @@ export const FileMock: File[] = [
     url: 'test',
     dateCreated: new Date().toString(),
     ownerId: '1',
+    shareTo: ['1'],
   },
 ];
