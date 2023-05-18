@@ -2,14 +2,14 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 class AWSService {
   private s3Client: S3Client;
-  private readonly S3_BASE_URL = `https://s3.${process.env.AWS_REGION}.amazonaws.com`;
+  private readonly S3_BASE_URL = `https://s3.${process.env.MY_AWS_REGION}.amazonaws.com`;
 
   constructor() {
     this.s3Client = new S3Client({
-      region: process.env.AWS_REGION || '',
+      region: process.env.MY_AWS_REGION || '',
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY || '',
-        secretAccessKey: process.env.AWS_SECRET_KEY_1 || '',
+        accessKeyId: process.env.MY_AWS_ACCESS_KEY || '',
+        secretAccessKey: process.env.MY_AWS_SECRET_KEY_1 || '',
       },
     });
   }

@@ -40,7 +40,7 @@ router.post(
 
       const file = _req.file;
       if (file) {
-        const bucketName = process.env.AWS_BUCKET_NAME || '';
+        const bucketName = process.env.MY_AWS_BUCKET_NAME || '';
         const fileName = `${file.originalname}`;
         const session = _req.session as CustomSession;
 

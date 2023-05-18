@@ -337,8 +337,8 @@ const connectToMockDatabase = async () => {
 };
 
 const mockCollection = (isSignup: boolean) => {
-  if (process.env['USERS_COLLECTION_NAME']) {
-    usersCollection = db.collection(process.env['USERS_COLLECTION_NAME']);
+  if (process.env['MY_USERS_COLLECTION_NAME']) {
+    usersCollection = db.collection(process.env['MY_USERS_COLLECTION_NAME']);
     const mockFind = jest.fn().mockReturnValue({
       toArray: () => [...UserMock],
     });
@@ -350,8 +350,8 @@ const mockCollection = (isSignup: boolean) => {
     jest.spyOn(usersCollection, 'findOne').mockImplementation(mockFindOne);
     collections.users = usersCollection;
   }
-  if (process.env['FILES_COLLECTION_NAME']) {
-    filesCollection = db.collection(process.env['FILES_COLLECTION_NAME']);
+  if (process.env['MY_FILES_COLLECTION_NAME']) {
+    filesCollection = db.collection(process.env['MY_FILES_COLLECTION_NAME']);
     const mockFind = jest.fn().mockReturnValue({
       toArray: () => [...FileMock],
     });
