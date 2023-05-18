@@ -145,7 +145,8 @@ describe('Test GET /files/{userId}', () => {
   it('should return 200 Success when passing correct accessToken to the header and userId', async () => {
     const res = await request(app)
       .get('/files')
-      .set('Authorization', `Bearer ${token}`);
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'application/json');
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -174,6 +175,7 @@ describe('Test POST /file-upload', () => {
       .field('key', 'value')
       .set('Authorization', `Bearer ${token}`)
       .set('Content-Type', 'multipart/form-data')
+      .set('Response-Type', 'application/json')
       .attach('file', fileData, 'sally-2.jpeg');
 
     expect(res.status).toBe(200);

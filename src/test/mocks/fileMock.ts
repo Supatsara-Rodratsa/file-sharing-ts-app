@@ -10,6 +10,7 @@ export const FileMock: File[] = [
     dateCreated: new Date().toString(),
     ownerId: '1',
     shareTo: ['1'],
+    ownerName: 'test',
   },
   {
     id: '2',
@@ -20,5 +21,6 @@ export const FileMock: File[] = [
     dateCreated: new Date().toString(),
     ownerId: '1',
     shareTo: ['1'],
+    ownerName: 'test',
   },
 ];
