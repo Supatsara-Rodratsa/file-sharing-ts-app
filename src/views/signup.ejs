@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>File Sharing App - Signup</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <section id="sign-up">
+      <h1>SIGN UP</h1>
+      <form class="form" action="/auth/signup" method="POST">
+        <div class="form-input">
+          <label>Username</label>
+          <input type="text" name="username" placeholder="Username" required />
+          <label>First Name</label>
+          <input
+            type="text"
+            name="firstName"
+            placeholder="First Name"
+            required
+          />
+          <label>Last Name</label>
+          <input type="text" name="lastName" placeholder="Last Name" required />
+          <label>Email</label>
+          <input type="email" name="email" placeholder="Email" required />
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+
+        <button type="submit">SIGN UP</button>
+      </form>
+    </section>
+  </body>
+</html>
