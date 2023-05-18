@@ -12,6 +12,11 @@ import User from '@/models/user';
 
 const router = express.Router();
 
+/* GET sign up page. */
+router.get('/', function (_req, res) {
+  res.render('signup', { title: 'Sign up' });
+});
+
 router.post('/', async function (_req, res) {
   const { username, firstName, lastName, email, password } = _req.body as User;
 
@@ -46,6 +51,14 @@ router.post('/', async function (_req, res) {
   // Keep Access Token in Session
   const session = _req.session as CustomSession;
   session.accessToken = token;
+  session.username = username;
+
+  if (
+    _req.headers['content-type'] === 'application/x-www-form-urlencoded' &&
+    session.accessToken
+  ) {
+    return res.redirect('/auth/login');
+  }
 
   /**
    * STATUS CODE: 200 SUCCESS

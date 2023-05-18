@@ -16,7 +16,8 @@ export const verifyToken: RequestHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(' ')[1];
+  const token =
+    req.headers.authorization?.split(' ')[1] || req.session.accessToken;
 
   if (!token) {
     /**

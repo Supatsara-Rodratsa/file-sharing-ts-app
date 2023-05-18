@@ -12,6 +12,11 @@ import User from '@/models/user';
 
 const router = express.Router();
 
+/* GET login page. */
+router.get('/', function (_req: CustomRequest, res) {
+  res.render('login', { title: 'LOGIN' });
+});
+
 router.post('/', async function (_req: CustomRequest, res) {
   try {
     const { username, password } = _req.body as User;
@@ -61,7 +66,18 @@ router.post('/', async function (_req: CustomRequest, res) {
       );
       // Store access token in session
       const session = _req.session as CustomSession;
-      if (accessToken) session.accessToken = accessToken;
+      if (accessToken) {
+        session.accessToken = accessToken;
+        session.username = existingUsername.username;
+      }
+
+      if (
+        _req.headers['content-type'] === 'application/x-www-form-urlencoded' &&
+        session.accessToken
+      ) {
+        return res.redirect('/files');
+      }
+
       /**
        * STATUS CODE: 200 SUCCESS
        */

@@ -4,6 +4,7 @@ import { Session } from 'express-session';
 
 export interface CustomSession extends Session {
   accessToken: string;
+  username: string;
 }
 
 export interface CustomRequest extends Request {

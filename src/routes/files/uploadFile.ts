@@ -3,7 +3,7 @@ import {
   HTTP_STATUS_DESC,
   HTTP_STATUS_ERROR_MSG,
 } from '@/constants/httpStatus.constant';
-import { CustomRequest } from '@/interfaces/custom.interface';
+import { CustomRequest, CustomSession } from '@/interfaces/custom.interface';
 import { verifyToken } from '@/middlewares/validateToken';
 import AWSService from '@/services/aws.service';
 import { collections } from '@/services/database.service';
@@ -42,6 +42,7 @@ router.post(
       if (file) {
         const bucketName = process.env.AWS_BUCKET_NAME || '';
         const fileName = `${file.originalname}`;
+        const session = _req.session as CustomSession;
 
         // Upload File to AWS S3
         const url = await awsService.uploadFile(
@@ -54,15 +55,32 @@ router.post(
         await collections.files?.insertOne({
           url,
           ownerId: _req.decodedToken?.id,
+          ownerName: session.username || '-',
           filename: fileName,
-          size: file.size,
+          size: calculateFileSize(file.size),
           format: file.mimetype,
           dateCreated: new Date(),
         });
 
-        res
-          .status(200)
-          .json({ description: HTTP_STATUS_DESC.UPLOAD_FILE_SUCCESS });
+        const updatedDocuments =
+          (await collections.files
+            ?.find({
+              $or: [
+                { ownerId: _req.decodedToken?.id },
+                { sharedTo: { $elemMatch: { $eq: _req.decodedToken?.id } } },
+              ],
+            })
+            .toArray()) || [];
+
+        // Handle the response based on the content-type header
+        if (_req.headers['response-type'] === 'application/json') {
+          return res
+            .status(200)
+            .json({ description: HTTP_STATUS_DESC.UPLOAD_FILE_SUCCESS });
+        }
+
+        // Render File Screen
+        return res.status(200).json({ files: updatedDocuments });
       } else {
         res
           .status(HTTP_STATUS.BAD_REQUEST)
@@ -83,5 +101,12 @@ router.post(
     }
   }
 );
+
+function calculateFileSize(size: number) {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (size == 0) return '0 Bytes';
+  const i = Math.floor(Math.log(size) / Math.log(1024));
+  return `${Math.round(size / Math.pow(1024, i))} ${sizes[i]}`;
+}
 
 export default router;

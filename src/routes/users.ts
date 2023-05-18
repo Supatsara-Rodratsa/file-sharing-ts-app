@@ -3,15 +3,20 @@ import {
   HTTP_STATUS_DESC,
   HTTP_STATUS_ERROR_MSG,
 } from '@/constants/httpStatus.constant';
+import { CustomRequest } from '@/interfaces/custom.interface';
 import { verifyToken } from '@/middlewares/validateToken';
 import { collections } from '@/services/database.service';
 import express from 'express';
+import { ObjectId } from 'mongodb';
 const router = express.Router();
 
-router.get('/', verifyToken, async function (_req, res) {
+router.get('/', verifyToken, async function (_req: CustomRequest, res) {
   try {
-    // Get All Users
-    const documents = (await collections.users?.find().toArray()) || [];
+    // Get All Users except current user
+    const documents =
+      (await collections.users
+        ?.find({ _id: { $ne: new ObjectId(_req.decodedToken?.id) } })
+        .toArray()) || [];
 
     return res.status(HTTP_STATUS.SUCCESS).json([...documents]);
   } catch (err: unknown) {
