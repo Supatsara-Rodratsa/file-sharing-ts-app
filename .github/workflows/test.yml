@@ -1,0 +1,22 @@
+name: running test coverage
+run-name: testing test coverage
+on: [push]
+jobs:
+  coverage:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        id: coverage
+        with:
+          output: report-markdown
+          test-script: npm run test
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: ${{ steps.coverage.outputs.report }}
+      - run: npm install
+      - run: npm test
