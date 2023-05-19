@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "export NODE_OPTIONS='--trace-deprecation --abort-on-uncaught-exception' && export NODE_ENV=development && nodemon --exec ts-node ./bin/www.ts",
-    "build": "chmod +x etc/build.sh",
+    "build": "sh etc/build.sh",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "prepare": "husky install",
@@ -28,7 +28,6 @@
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
     "multer-s3": "^3.0.1",
-    "rimraf": "^3.0.2",
     "uninstall": "^0.0.0",
     "uuid": "^9.0.0"
   },
@@ -59,10 +58,11 @@
     "mongodb-memory-server": "^8.12.2",
     "nodemon": "^2.0.15",
     "prettier": "^2.8.8",
+    "rimraf": "^5.0.1",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.2.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.9.5"
   },
   "_moduleAliases": {
     "@": "./src"
