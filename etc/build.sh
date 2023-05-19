@@ -8,4 +8,4 @@ cp -R src/public dist/src/public
 
 cp package.json dist/
 
-sed -i '' 's/\.\/bin\/www\.ts/\.\/bin\/www\.js/' dist/package.json
+sed -i 's/\.\/bin\/www\.ts/\.\/bin\/www\.js/g' dist/package.json
