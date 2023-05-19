@@ -379,28 +379,25 @@ const connectToMockDatabase = async () => {
 };
 
 const mockCollection = (isSignup: boolean) => {
-  if (process.env['MY_USERS_COLLECTION_NAME']) {
-    usersCollection = db.collection(process.env['MY_USERS_COLLECTION_NAME']);
-    const mockFind = jest.fn().mockReturnValue({
-      toArray: () => [...UserMock],
-    });
+  usersCollection = db.collection('users');
+  const mockFind = jest.fn().mockReturnValue({
+    toArray: () => [...UserMock],
+  });
 
-    const mockFindOne = jest
-      .fn()
-      .mockReturnValue(!isSignup ? { ...UserMock[0] } : null);
-    jest.spyOn(usersCollection, 'find').mockImplementation(mockFind);
-    jest.spyOn(usersCollection, 'findOne').mockImplementation(mockFindOne);
-    collections.users = usersCollection;
-  }
-  if (process.env['MY_FILES_COLLECTION_NAME']) {
-    filesCollection = db.collection(process.env['MY_FILES_COLLECTION_NAME']);
-    const mockFind = jest.fn().mockReturnValue({
-      toArray: () => [...FileMock],
-    });
-    jest.spyOn(filesCollection, 'find').mockImplementation(mockFind);
-    jest.spyOn(filesCollection, 'updateOne').mockImplementation(mockFind);
-    collections.files = filesCollection;
-  }
+  const mockFindOne = jest
+    .fn()
+    .mockReturnValue(!isSignup ? { ...UserMock[0] } : null);
+  jest.spyOn(usersCollection, 'find').mockImplementation(mockFind);
+  jest.spyOn(usersCollection, 'findOne').mockImplementation(mockFindOne);
+  collections.users = usersCollection;
+
+  filesCollection = db.collection('files');
+  const mockFileFind = jest.fn().mockReturnValue({
+    toArray: () => [...FileMock],
+  });
+  jest.spyOn(filesCollection, 'find').mockImplementation(mockFileFind);
+  jest.spyOn(filesCollection, 'updateOne').mockImplementation(mockFileFind);
+  collections.files = filesCollection;
 };
 
 const disconnectToMockDatabase = async () => {

@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+env:
+  MY_SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
+  MY_DB_CONN_STRING: ${{ secrets.MY_DB_CONN_STRING }}
+  MY_DB_NAME: ${{ secrets.MY_DB_NAME }}
 
 jobs:
   lint-project:
@@ -19,12 +23,6 @@ jobs:
         run: npm run lint
 
       - name: Secret Variables
-        env:
-          MY_SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
-          MY_DB_CONN_STRING: ${{ secrets.MY_DB_CONN_STRING }}
-          MY_DB_NAME: ${{ secrets.MY_DB_NAME }}
-          MY_USERS_COLLECTION_NAME: ${{ secrets.MY_USERS_COLLECTION_NAME }}
-          MY_FILES_COLLECTION_NAME: ${{ secrets.MY_FILES_COLLECTION_NAME }}
         run: |
           echo "MY_SECRET_KEY: $MY_SECRET_KEY"
           echo "MY_DB_CONN_STRING: $MY_DB_CONN_STRING"
@@ -33,10 +31,4 @@ jobs:
           echo "MY_FILES_COLLECTION_NAME: $MY_FILES_COLLECTION_NAME"
 
       - name: Testing
-        env:
-          MY_SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
-          MY_DB_CONN_STRING: ${{ secrets.MY_DB_CONN_STRING }}
-          MY_DB_NAME: ${{ secrets.MY_DB_NAME }}
-          MY_USERS_COLLECTION_NAME: ${{ secrets.MY_USERS_COLLECTION_NAME }}
-          MY_FILES_COLLECTION_NAME: ${{ secrets.MY_FILES_COLLECTION_NAME }}
         run: npm test
