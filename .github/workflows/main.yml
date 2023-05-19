@@ -3,12 +3,27 @@ on:
   push:
     branches:
       - main
+
+env:
+  MY_SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
+  MY_DB_CONN_STRING: ${{ secrets.MY_DB_CONN_STRING }}
+  MY_DB_NAME: ${{ secrets.MY_DB_NAME }}
+  MY_USERS_COLLECTION_NAME: ${{ secrets.MY_USERS_COLLECTION_NAME }}
+  MY_FILES_COLLECTION_NAME: ${{ secrets.MY_FILES_COLLECTION_NAME }}
+
 jobs:
-  workflows:
+  lint-project:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
       - name: Running lint script
         run: npm run lint
 
