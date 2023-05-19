@@ -23,4 +23,10 @@ jobs:
           MY_DB_NAME: ${{ secrets.MY_DB_NAME }}
           MY_USERS_COLLECTION_NAME: ${{ secrets.MY_USERS_COLLECTION_NAME }}
           MY_FILES_COLLECTION_NAME: ${{ secrets.MY_FILES_COLLECTION_NAME }}
-        run: npm run test
+        run: |
+          echo "MY_SECRET_KEY: $MY_SECRET_KEY"
+          echo "MY_DB_CONN_STRING: $MY_DB_CONN_STRING"
+          echo "MY_DB_NAME: $MY_DB_NAME"
+          echo "MY_USERS_COLLECTION_NAME: $MY_USERS_COLLECTION_NAME"
+          echo "MY_FILES_COLLECTION_NAME: $MY_FILES_COLLECTION_NAME"
+          npm run test
