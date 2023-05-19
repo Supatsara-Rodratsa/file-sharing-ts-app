@@ -1,4 +1,3 @@
-import { CONSTANT } from '@/constants/constant';
 import {
   HTTP_STATUS,
   HTTP_STATUS_DESC,
@@ -32,7 +31,7 @@ export const verifyToken: RequestHandler = async (
   try {
     const decoded = jwt.verify(
       token,
-      process.env[CONSTANT.SECRET_KEY] as Secret
+      process.env.MY_SECRET_KEY as Secret
     ) as User;
 
     const session = req.session as CustomSession;

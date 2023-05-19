@@ -6,7 +6,6 @@ import {
   HTTP_STATUS_DESC,
   HTTP_STATUS_ERROR_MSG,
 } from '@/constants/httpStatus.constant';
-import { CONSTANT } from '@/constants/constant';
 import { collections } from '@/services/database.service';
 import User from '@/models/user';
 
@@ -44,7 +43,7 @@ router.post('/', async function (_req, res) {
 
   const token = jwt.sign(
     { id: result?.insertedId },
-    process.env[CONSTANT.SECRET_KEY] as Secret,
+    process.env.MY_SECRET_KEY as Secret,
     { expiresIn: '1h' }
   );
 

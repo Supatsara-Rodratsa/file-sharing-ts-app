@@ -7,7 +7,6 @@ import { CustomRequest, CustomSession } from '@/interfaces/custom.interface';
 import jwt, { Secret } from 'jsonwebtoken';
 import { collections } from '@/services/database.service';
 import express from 'express';
-import { CONSTANT } from '@/constants/constant';
 import User from '@/models/user';
 
 const router = express.Router();
@@ -61,7 +60,7 @@ router.post('/', async function (_req: CustomRequest, res) {
       // Create new access token
       const accessToken = jwt.sign(
         { id: existingUsername._id },
-        process.env[CONSTANT.SECRET_KEY] as Secret,
+        process.env.MY_SECRET_KEY as Secret,
         { expiresIn: '1h' }
       );
       // Store access token in session
