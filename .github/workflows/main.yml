@@ -1,0 +1,20 @@
+name: Linting and Testing
+on:
+  push:
+    branches:
+      - main
+jobs:
+  lint-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Running lint script
+        run: npm run lint
+
+      - name: Testing script
+        run: npm test
