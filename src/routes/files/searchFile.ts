@@ -24,8 +24,11 @@ router.get('/', verifyToken, async function (_req: CustomRequest, res) {
     const documents =
       (await collections.files
         ?.find({
-          $and: [
+          $or: [
             { ownerId: userId },
+            { sharedTo: { $elemMatch: { $eq: _req.decodedToken?.id } } },
+          ],
+          $and: [
             { filename: { $regex: filename, $options: 'i' } }, // Case-insensitive search for filename containing 'text'
           ],
         })
