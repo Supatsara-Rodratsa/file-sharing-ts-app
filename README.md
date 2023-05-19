@@ -25,6 +25,7 @@ Authentication is implemented using JSON Web Tokens (JWT). When a user logs in, 
 - [JWT](https://jwt.io/)
 - [Swagger Editor](https://editor.swagger.io/)
 - [AWS S3](https://aws.amazon.com/)
+- [Docker](https://www.docker.com/)
 
 ## API Endpoints 🪄💥
 
