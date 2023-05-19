@@ -5,4 +5,5 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
+  testTimeout: 1000,
 };
