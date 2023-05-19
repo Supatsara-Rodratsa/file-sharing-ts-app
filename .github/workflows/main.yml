@@ -7,9 +7,6 @@ jobs:
   workflows:
     runs-on: ubuntu-latest
     steps:
-      - name: Install dependencies
-        run: npm ci
-
       - name: Running lint script
         run: npm run lint
 
