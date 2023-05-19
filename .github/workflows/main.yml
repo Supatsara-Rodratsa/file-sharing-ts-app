@@ -16,7 +16,7 @@ jobs:
       - name: Running lint script
         run: npm run lint
 
-      - name: Testing script
+      - name: Secret Variables
         env:
           MY_SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
           MY_DB_CONN_STRING: ${{ secrets.MY_DB_CONN_STRING }}
@@ -29,4 +29,6 @@ jobs:
           echo "MY_DB_NAME: $MY_DB_NAME"
           echo "MY_USERS_COLLECTION_NAME: $MY_USERS_COLLECTION_NAME"
           echo "MY_FILES_COLLECTION_NAME: $MY_FILES_COLLECTION_NAME"
-          npm run test
+
+      - name: Testing
+        run: npm test
