@@ -25,16 +25,15 @@ jest.mock('@/services/aws.service', () => {
   }));
 });
 
-beforeAll(async () => {
-  await connectToMockDatabase();
-});
-
-afterAll(async () => {
-  await disconnectToMockDatabase();
-});
-
 describe('Test POST /auth/signup Response', () => {
-  beforeAll(() => mockCollection(true));
+  beforeAll(async () => {
+    await connectToMockDatabase();
+    mockCollection(true);
+  });
+
+  afterAll(async () => {
+    await disconnectToMockDatabase();
+  });
   it('should return 200 Success when passing requestBody correctly without duplicate username', async () => {
     const res = await request(app).post('/auth/signup').send({
       username: `test2`,
@@ -56,7 +55,14 @@ describe('Test POST /auth/signup Response', () => {
 });
 
 describe('Test POST /auth/login Response', () => {
-  beforeAll(() => mockCollection(false));
+  beforeAll(async () => {
+    await connectToMockDatabase();
+    mockCollection(false);
+  });
+
+  afterAll(async () => {
+    await disconnectToMockDatabase();
+  });
   it('should return success when passing correct username and password', async () => {
     const res = await request(app).post('/auth/login').send({
       username: 'test',
@@ -87,6 +93,15 @@ describe('Test POST /auth/login Response', () => {
 });
 
 describe('Test POST /auth/logout Response', () => {
+  beforeAll(async () => {
+    await connectToMockDatabase();
+    mockCollection(false);
+  });
+
+  afterAll(async () => {
+    await disconnectToMockDatabase();
+  });
+
   beforeEach(async () => {
     if (token) return;
     token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
@@ -112,6 +127,14 @@ describe('Test POST /auth/logout Response', () => {
 });
 
 describe('Test GET /users Response', () => {
+  beforeAll(async () => {
+    await connectToMockDatabase();
+    mockCollection(false);
+  });
+
+  afterAll(async () => {
+    await disconnectToMockDatabase();
+  });
   beforeEach(() => {
     if (token) return;
     token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
@@ -137,6 +160,15 @@ describe('Test GET /users Response', () => {
 });
 
 describe('Test GET /files/{userId}', () => {
+  beforeAll(async () => {
+    await connectToMockDatabase();
+    mockCollection(false);
+  });
+
+  afterAll(async () => {
+    await disconnectToMockDatabase();
+  });
+
   beforeEach(() => {
     if (token) return;
     token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
@@ -162,6 +194,15 @@ describe('Test GET /files/{userId}', () => {
 });
 
 describe('Test POST /file-upload', () => {
+  beforeAll(async () => {
+    await connectToMockDatabase();
+    mockCollection(false);
+  });
+
+  afterAll(async () => {
+    await disconnectToMockDatabase();
+  });
+
   beforeEach(() => {
     if (token) return;
     token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
@@ -203,6 +244,15 @@ describe('Test POST /file-upload', () => {
 });
 
 describe('Test GET /file?filename=test', () => {
+  beforeAll(async () => {
+    await connectToMockDatabase();
+    mockCollection(false);
+  });
+
+  afterAll(async () => {
+    await disconnectToMockDatabase();
+  });
+
   beforeEach(() => {
     if (token) return;
     token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
@@ -237,32 +287,16 @@ describe('Test GET /file?filename=test', () => {
   });
 });
 
-// describe('Test DELETE /file/{userId}/{fileId}', () => {
-//   beforeEach(() => {
-//     if (token) return;
-//     token = jwt.sign({ userId: '123' }, 'your-secret-key');
-//   });
-
-//   it('should return 204 File successfully deleted when deleting a file with correct accessToken, userId, and fileId', async () => {
-//     const res = await request(app)
-//       .delete('/file/123/1')
-//       .set('Authorization', `Bearer ${token}`);
-
-//     expect(res.status).toBe(204);
-//     expect(res.body.description).toBe('File successfully deleted');
-//   });
-
-//   it('should return 401 Unauthorized when passing incorrect accessToken', async () => {
-//     const invalidToken = 'invalid-token';
-//     const res = await request(app)
-//       .delete('/file/123/1')
-//       .set('Authorization', `Bearer ${invalidToken}`);
-
-//     expect(res.status).toBe(401);
-//   });
-// });
-
 describe('Test POST /share/{fileId}', () => {
+  beforeAll(async () => {
+    await connectToMockDatabase();
+    mockCollection(false);
+  });
+
+  afterAll(async () => {
+    await disconnectToMockDatabase();
+  });
+
   beforeEach(() => {
     if (token) return;
     token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
@@ -303,6 +337,15 @@ describe('Test POST /share/{fileId}', () => {
 });
 
 describe('Test GET /shared-files', () => {
+  beforeAll(async () => {
+    await connectToMockDatabase();
+    mockCollection(false);
+  });
+
+  afterAll(async () => {
+    await disconnectToMockDatabase();
+  });
+
   beforeEach(() => {
     if (token) return;
     token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
