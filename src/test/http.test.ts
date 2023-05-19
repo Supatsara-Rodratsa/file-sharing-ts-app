@@ -6,7 +6,6 @@ import dotenv from 'dotenv';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongoClient, Db, Document, Collection } from 'mongodb';
 import { collections } from '@/services/database.service';
-import { CONSTANT } from '@/constants/constant';
 import { UserMock } from './mocks/userMock';
 import { FileMock } from './mocks/fileMock';
 
@@ -104,7 +103,7 @@ describe('Test POST /auth/logout Response', () => {
 
   beforeEach(async () => {
     if (token) return;
-    token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
+    token = jwt.sign({}, process.env.MY_SECRET_KEY as Secret);
   });
 
   it('should return 200 Success when invalidating jwt token successfully', async () => {
@@ -137,7 +136,7 @@ describe('Test GET /users Response', () => {
   });
   beforeEach(() => {
     if (token) return;
-    token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
+    token = jwt.sign({}, process.env.MY_SECRET_KEY as Secret);
   });
 
   it('should return 200 status with all list of users', async () => {
@@ -171,7 +170,7 @@ describe('Test GET /files/{userId}', () => {
 
   beforeEach(() => {
     if (token) return;
-    token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
+    token = jwt.sign({}, process.env.MY_SECRET_KEY as Secret);
   });
 
   it('should return 200 Success when passing correct accessToken to the header and userId', async () => {
@@ -205,7 +204,7 @@ describe('Test POST /file-upload', () => {
 
   beforeEach(() => {
     if (token) return;
-    token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
+    token = jwt.sign({}, process.env.MY_SECRET_KEY as Secret);
   });
 
   it('should return 200 Success when uploading a file with correct accessToken, userId, and file', async () => {
@@ -255,7 +254,7 @@ describe('Test GET /file?filename=test', () => {
 
   beforeEach(() => {
     if (token) return;
-    token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
+    token = jwt.sign({}, process.env.MY_SECRET_KEY as Secret);
   });
 
   it('should return 200 Success when searching filename', async () => {
@@ -299,7 +298,7 @@ describe('Test POST /share/{fileId}', () => {
 
   beforeEach(() => {
     if (token) return;
-    token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
+    token = jwt.sign({}, process.env.MY_SECRET_KEY as Secret);
   });
 
   it('should return 200 File successfully shared when passing correct requestBody', async () => {
@@ -348,7 +347,7 @@ describe('Test GET /shared-files', () => {
 
   beforeEach(() => {
     if (token) return;
-    token = jwt.sign({}, process.env[CONSTANT.SECRET_KEY] as Secret);
+    token = jwt.sign({}, process.env.MY_SECRET_KEY as Secret);
   });
 
   it('should return 200 when passing correct userId', async () => {
