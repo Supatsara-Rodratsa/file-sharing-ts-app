@@ -134,6 +134,7 @@ a {
   color: black;
   display: flex;
   flex-direction: column;
+  font-size: 16px;
 }
 
 .container {
@@ -238,7 +239,8 @@ a {
 .logout {
   width: 100%;
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
+  align-items: end;
 }
 
 .logout button {
@@ -340,4 +342,16 @@ input[type='checkbox']:checked::before {
 input[type='checkbox']:focus {
   outline: max(2px, 0.15em) solid currentColor;
   outline-offset: max(2px, 0.15em);
+}
+
+.logout p {
+  font-size: 32px;
+  color: #1b444f;
+  font-weight: 900;
+  text-transform: capitalize;
+}
+
+.error {
+  font-size: 32px;
+  font-weight: bold;
 }

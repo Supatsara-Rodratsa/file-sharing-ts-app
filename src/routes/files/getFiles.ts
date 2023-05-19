@@ -41,6 +41,7 @@ router.get('/', verifyToken, async function (_req: CustomRequest, res) {
       files: [...documents],
       users: [...users],
       token: session.accessToken,
+      username: session.username,
     });
   } catch (err: unknown) {
     if (err instanceof Error) {

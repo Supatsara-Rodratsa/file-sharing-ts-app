@@ -1,3 +1,14 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>File Sharing</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <section class="container">
+      <div class="file-container">
+        <div class="not-found error">Oops, <%= error %></div>
+      </div>
+    </section>
+  </body>
+</html>
